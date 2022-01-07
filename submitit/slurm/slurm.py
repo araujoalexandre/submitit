@@ -401,7 +401,7 @@ def _make_sbatch_string(
     mem: tp.Optional[str] = None,
     mem_per_gpu: tp.Optional[str] = None,
     mem_per_cpu: tp.Optional[str] = None,
-    signal_delay_s: int = 90,
+    signal_delay_s: int = 0,
     comment: tp.Optional[str] = None,
     constraint: tp.Optional[str] = None,
     exclude: tp.Optional[str] = None,
@@ -459,7 +459,7 @@ def _make_sbatch_string(
     ]
     parameters = {k: v for k, v in locals().items() if v is not None and k not in nonslurm}
     # rename and reformat parameters
-    parameters["signal"] = f"USR1@{signal_delay_s}"
+    # parameters["signal"] = f"USR1@{signal_delay_s}"
     if job_name:
         parameters["job_name"] = utils.sanitize(job_name)
     if comment:
