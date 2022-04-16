@@ -137,8 +137,8 @@ class JobEnvironment:
         signal.signal(signal.SIGUSR1, handler.checkpoint_and_try_requeue)
         # A priori we don't need other signals anymore,
         # but still log them to make it easier to debug.
-        signal.signal(signal.SIGTERM, handler.bypass)
-        signal.signal(signal.SIGCONT, handler.bypass)
+        signal.signal(signal.SIGTERM, handler.exit)
+        signal.signal(signal.SIGCONT, handler.exit)
 
     # pylint: disable=no-self-use,unused-argument
     def _requeue(self, countdown: int) -> None:
@@ -228,6 +228,12 @@ class SignalHandler:
         delayed = self._delayed
         if hasattr(delayed.function, "checkpoint"):
             _checkpoint(self._delayed, self._job_paths.submitted_pickle, self._delayed._timeout_countdown)
+        self._exit()
+
+    def exit(
+        self, signum: int, frame: types.FrameType = None  # pylint:disable=unused-argument
+    ) -> None:
+        self._logger.info(f"Caught signal {signal.Signals(signum).name} on {socket.gethostname()}")
         self._exit()
 
     def _exit(self) -> None:
