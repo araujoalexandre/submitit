@@ -176,8 +176,8 @@ class SignalHandler:
             )
         return timed_out
 
-    def bypass(self, signum: int, frame: types.FrameType = None) -> None:  # pylint:disable=unused-argument
-        self._logger.warning(f"Bypassing signal {signal.Signals(signum).name}")
+    # def bypass(self, signum: int, frame: types.FrameType = None) -> None:  # pylint:disable=unused-argument
+    #     self._logger.warning(f"Bypassing signal {signal.Signals(signum).name}")
 
     def checkpoint_and_try_requeue(
         self, signum: int, frame: types.FrameType = None  # pylint:disable=unused-argument
